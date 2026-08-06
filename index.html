@@ -1,25 +1,444 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OtchiVW - Garage Automobile Oran</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0d1117; color: #ffffff; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center; }
-        .container { max-width: 600px; background: #161b22; padding: 40px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .logo { font-size: 2.5rem; font-weight: bold; color: #58a6ff; margin-bottom: 10px; letter-spacing: 1px; }
-        h1 { font-size: 1.5rem; margin-bottom: 15px; color: #c9d1d9; }
-        p { color: #8b949e; font-size: 1rem; line-height: 1.6; margin-bottom: 25px; }
-        .badge { display: inline-block; background-color: rgba(56, 139, 253, 0.15); color: #58a6ff; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(56, 139, 253, 0.4); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#131313" />
+  <meta name="description" content="OTchiVW Auto Repair - premium auto repair in Oran, Algeria. Engine diagnostics, brakes, oil changes, transmission and more. Call 0555 23 34 99 to book." />
+  <title>OTchiVW Auto Repair | Oran, Algeria</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- React & React DOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel for JSX Compilation in Browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Theme Tokens & Styles */
+    :root {
+      --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --color-primary: oklch(0.5771 0.2152 27.33);
+      --color-primary-hover: oklch(0.498 0.192 27.5);
+      --color-on-primary: oklch(1 0 0);
+      --color-accent-soft: rgba(220, 38, 38, 0.12);
+      --color-background: #131313;
+      --color-surface: #1d1d1d;
+      --color-surface-hover: #242424;
+      --color-foreground: #f5f5f5;
+      --color-muted: #a3a3a3;
+      --color-border: #2e2e2e;
+      --color-destructive: #dc2626;
+      --color-ring: #dc2626;
+      --shadow-glow: 0 0 60px rgba(220, 38, 38, 0.3);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--color-background);
+      color: var(--color-foreground);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+    }
+
+    ::selection {
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
+    }
+
+    .hero-gradient-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(
+          circle at 30% 40%,
+          rgba(220, 38, 38, 0.16) 0%,
+          rgba(220, 38, 38, 0.06) 30%,
+          transparent 60%
+        ),
+        radial-gradient(
+          circle at 75% 65%,
+          rgba(72, 92, 163, 0.08) 0%,
+          transparent 50%
+        );
+    }
+
+    .hero-gradient-layer.is-animated {
+      animation: hero-gradient-drift 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes hero-gradient-drift {
+      0% { transform: translate3d(-3%, -3%, 0) scale(1.04); }
+      100% { transform: translate3d(3%, 3%, 0) scale(1); }
+    }
+
+    /* Service Animations */
+    @keyframes service-scan {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(36px); }
+    }
+    @keyframes service-drop {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+      20% { transform: translateY(6px) scale(1); opacity: 0.8; }
+      50% { transform: translateY(20px) scale(0.9); opacity: 0.3; }
+      80% { transform: translateY(40px) scale(0.85); opacity: 0.1; }
+    }
+    @keyframes service-gear {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes service-tire {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes service-spark {
+      0%, 100% { opacity: 0; transform: scale(0.6); }
+      25% { opacity: 0.8; transform: scale(1.2); }
+      50% { opacity: 0.2; transform: scale(0.8); }
+      75% { opacity: 0.6; transform: scale(1); }
+    }
+    @keyframes service-smoke {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateY(-18px) scale(1.4); opacity: 0.05; }
+    }
+
+    /* Utilities */
+    .bg-primary { background-color: #dc2626; }
+    .bg-surface { background-color: var(--color-surface); }
+    .bg-surface-hover:hover { background-color: var(--color-surface-hover); }
+    .bg-accent-soft { background-color: var(--color-accent-soft); }
+    .text-primary { color: #dc2626; }
+    .text-muted { color: var(--color-muted); }
+    .text-foreground { color: var(--color-foreground); }
+    .text-on-primary { color: #ffffff; }
+    .border-border { border-color: var(--color-border); }
+    .shadow-glow { box-shadow: var(--shadow-glow); }
+
+    :focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">OtchiVW</div>
-        <h1>Garage Automobile — Oran</h1>
-        <p>Notre nouveau site web est actuellement en cours de construction. Nous serons bientôt en ligne pour vous servir !</p>
-        <div class="badge">⚙️ Site Web En Cours de Construction</div>
-    </div>
-</body>
-</html>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback, forwardRef } = React;
+
+    const PHONE_DISPLAY = "0555 23 34 99";
+    const PHONE_TEL = "tel:+213555233499";
+    const ORAN_MAPS_URL = "https://www.google.com/maps/search/?api=1&query=Oran%2C+Algeria";
+    const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=PC89%2B37+Oran";
+    const SECTION_IDS = ["hero", "services", "contact"];
+
+    // Helper to render Lucide Icons dynamically
+    const Icon = ({ name, className = "w-5 h-5", ariaHidden = true }) => {
+      useEffect(() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }, [name]);
+      return <i data-lucide={name} className={className} aria-hidden={ariaHidden}></i>;
+    };
+
+    // --- SERVICE ILLUSTRATIONS ---
+    function Grid({ keyOffset = 0 }) {
+      return (
+        <g stroke="#DC2626" strokeWidth="0.5" opacity="0.08" aria-hidden="true">
+          {Array.from({ length: 9 }, (_, i) => (
+            <line key={`v${keyOffset + i}`} x1={i * 50} y1={0} x2={i * 50} y2={220} />
+          ))}
+          {Array.from({ length: 5 }, (_, i) => (
+            <line key={`h${keyOffset + i}`} x1={0} y1={i * 55} x2={400} y2={i * 55} />
+          ))}
+        </g>
+      );
+    }
+
+    function Gear({ cx, cy, r, reverse = false }) {
+      const teeth = 8;
+      return (
+        <g style={{ transformOrigin: `${cx}px ${cy}px`, animation: `service-gear ${reverse ? "reverse" : ""} 6s linear infinite` }}>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="#DC2626" strokeWidth="1.5" opacity="0.25" />
+          <circle cx={cx} cy={cy} r={r * 0.3} fill="none" stroke="#DC2626" strokeWidth="2" opacity="0.35" />
+          {Array.from({ length: teeth }, (_, i) => (
+            <rect
+              key={i}
+              x={cx - r * 0.06}
+              y={cy - r - r * 0.28}
+              width={r * 0.12}
+              height={r * 0.28}
+              rx={1}
+              fill="#DC2626"
+              opacity="0.35"
+              transform={`rotate(${(360 / teeth) * i}, ${cx}, ${cy})`}
+            />
+          ))}
+        </g>
+      );
+    }
+
+    function Label({ x, text }) {
+      return (
+        <text x={x} y={205} textAnchor="middle" fill="#DC2626" fontSize="10" fontWeight="600" opacity="0.4">
+          {text}
+        </text>
+      );
+    }
+
+    const R = "#DC2626";
+
+    function ServiceIllustration({ serviceId }) {
+      const anim = (n) => `${n} 3s ease-in-out infinite`;
+
+      switch (serviceId) {
+        case 1:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#151520" rx="12" />
+              <Grid keyOffset={0} />
+              <rect x={100} y={75} width={130} height={90} rx={6} fill={R} opacity="0.08" stroke={R} strokeWidth="1.5" />
+              <rect x={110} y={85} width={40} height={22} rx={3} fill={R} opacity="0.2" />
+              <rect x={180} y={85} width={40} height={22} rx={3} fill={R} opacity="0.2" />
+              <rect x={145} y={115} width={8} height={35} rx={2} fill={R} opacity="0.25" />
+              <rect x={192} y={115} width={8} height={35} rx={2} fill={R} opacity="0.25" />
+              <path d="M230 120 L285 100 L305 75" stroke={R} strokeWidth="1.5" opacity="0.4" fill="none" />
+              <rect x={285} y={48} width={70} height={52} rx={4} fill={R} opacity="0.06" stroke={R} strokeWidth="1.2" />
+              <rect x={291} y={54} width={58} height={2} fill={R} opacity="0.7" rx={1} style={{ animation: anim("service-scan") }} />
+              <path d="M291 76 Q300 66 309 76 T327 76 T345 76" stroke={R} strokeWidth="1.2" opacity="0.4" fill="none" />
+              <Label x={310} text="DIAGNOSTICS" />
+            </svg>
+          );
+        case 2:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#161616" rx="12" />
+              <circle cx={200} cy={105} r={62} fill="none" stroke={R} strokeWidth="1.5" opacity="0.22" />
+              <circle cx={200} cy={105} r={52} fill="none" stroke={R} strokeWidth="1" opacity="0.15" />
+              <circle cx={200} cy={105} r={18} fill="none" stroke={R} strokeWidth="1.5" opacity="0.35" />
+              <circle cx={200} cy={105} r={7} fill={R} opacity="0.25" />
+              {[0, 60, 120, 180, 240, 300].map((d) => {
+                const rad = (d * Math.PI) / 180;
+                return (
+                  <rect
+                    key={d}
+                    x={200 + 44 * Math.cos(rad) - 4}
+                    y={105 + 44 * Math.sin(rad) - 1.5}
+                    width={8}
+                    height={3}
+                    rx={1}
+                    fill={R}
+                    opacity="0.3"
+                    transform={`rotate(${d}, ${200 + 44 * Math.cos(rad)}, ${105 + 44 * Math.sin(rad)})`}
+                  />
+                );
+              })}
+              <path d="M222 55 Q265 55 265 88 L265 140 Q265 162 222 162" fill="none" stroke={R} strokeWidth="2.5" opacity="0.5" />
+              <line x1={222} y1={55} x2={222} y2={162} stroke={R} strokeWidth="2" opacity="0.4" />
+              <Label x={200} text="BRAKES" />
+            </svg>
+          );
+        case 3:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#181c14" rx="12" />
+              <rect x={145} y={50} width={70} height={120} rx={6} fill="none" stroke={R} strokeWidth="1.5" opacity="0.3" />
+              <rect x={155} y={58} width={50} height={100} rx={4} fill={R} opacity="0.05" />
+              <rect x={160} y={40} width={40} height={12} rx={3} fill="none" stroke={R} strokeWidth="1.3" opacity="0.35" />
+              <path d="M192 18 Q192 30 198 30 Q204 30 204 18 Q198 8 192 18 Z" fill={R} opacity="0.5" style={{ animation: anim("service-drop") }} />
+              <Label x={300} text="OIL" />
+            </svg>
+          );
+        case 4:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#16161e" rx="12" />
+              <Gear cx={170} cy={100} r={35} />
+              <Gear cx={248} cy={128} r={28} reverse />
+              <rect x={65} y={55} width={6} height={90} rx={3} fill={R} opacity="0.4" />
+              <circle cx={68} cy={50} r={10} fill="none" stroke={R} strokeWidth="2" opacity="0.4" />
+              <Label x={260} text="TRANSMISSION" />
+            </svg>
+          );
+        case 6:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#151515" rx="12" />
+              <g style={{ transformOrigin: "200px 105px", animation: "service-tire 8s linear infinite" }}>
+                <circle cx={200} cy={105} r={60} fill="none" stroke={R} strokeWidth="1.5" opacity="0.2" />
+                <circle cx={200} cy={105} r={55} fill="none" stroke={R} strokeWidth="0.5" opacity="0.15" />
+                <circle cx={200} cy={105} r={20} fill={R} opacity="0.04" stroke={R} strokeWidth="1.5" />
+                <circle cx={200} cy={105} r={8} fill="none" stroke={R} strokeWidth="1.2" opacity="0.3" />
+              </g>
+              <Label x={200} text="TIRES" />
+            </svg>
+          );
+        case 8:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#141418" rx="12" />
+              <rect x={130} y={50} width={55} height={120} rx={8} fill="none" stroke={R} strokeWidth="1.5" opacity="0.3" />
+              <path d="M260 70 L290 70 L280 90 L310 90 L260 140" fill="none" stroke={R} strokeWidth="2.5" opacity="0.4" strokeLinejoin="round" />
+              <circle cx={230} cy={150} r={6} fill={R} opacity="0.5" style={{ animation: anim("service-spark") }} />
+              <circle cx={280} cy={55} r={4} fill={R} opacity="0.4" style={{ animation: anim("service-spark") }} />
+              <Label x={310} text="ELECTRICAL" />
+            </svg>
+          );
+        default:
+          return (
+            <svg viewBox="0 0 400 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="220" fill="#151520" rx="12" />
+              <Grid keyOffset={0} />
+              <Label x={200} text="OTCHIVW SERVICE" />
+            </svg>
+          );
+      }
+    }
+
+    // --- COMPONENTS ---
+
+    function Navbar({ activeSection, isScrolled, onNavClick }) {
+      const [mobileOpen, setMobileOpen] = useState(false);
+
+      const NAV_LINKS = [
+        { id: "hero", label: "Home" },
+        { id: "services", label: "Services" },
+        { id: "contact", label: "Contact" },
+      ];
+
+      const handleLinkClick = (id) => {
+        onNavClick(id);
+        setMobileOpen(false);
+      };
+
+      return (
+        <>
+          <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md shadow-lg" : "bg-transparent"}`}>
+            <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
+              <button onClick={() => handleLinkClick("hero")} className="flex items-center gap-1.5 text-xl font-extrabold tracking-tight hover:opacity-85 transition-opacity">
+                <span className="text-foreground">OTchi</span>
+                <span className="text-primary">VW</span>
+              </button>
+
+              <ul className="hidden md:flex items-center gap-8">
+                {NAV_LINKS.map((link) => (
+                  <li key={link.id}>
+                    <button
+                      onClick={() => handleLinkClick(link.id)}
+                      className={`relative py-1 text-sm font-medium tracking-wide uppercase transition-colors duration-200 ${activeSection === link.id ? "text-primary" : "text-muted hover:text-foreground"}`}
+                    >
+                      {link.label}
+                      {activeSection === link.id && <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-primary rounded-full" />}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              <button className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-surface-hover" onClick={() => setMobileOpen(!mobileOpen)}>
+                <Icon name={mobileOpen ? "x" : "menu"} className="w-6 h-6 text-foreground" />
+              </button>
+            </nav>
+          </header>
+
+          {mobileOpen && (
+            <div className="fixed inset-0 z-[60] bg-black/60 flex justify-end">
+              <div className="w-72 bg-surface h-full shadow-2xl flex flex-col p-4">
+                <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
+                  <span className="text-lg font-extrabold">
+                    <span className="text-foreground">OTchi</span>
+                    <span className="text-primary">VW</span>
+                  </span>
+                  <button onClick={() => setMobileOpen(false)}>
+                    <Icon name="x" className="w-6 h-6 text-foreground" />
+                  </button>
+                </div>
+                <ul className="flex flex-col gap-2">
+                  {NAV_LINKS.map((link) => (
+                    <li key={link.id}>
+                      <button
+                        onClick={() => handleLinkClick(link.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium uppercase ${activeSection === link.id ? "text-primary bg-accent-soft" : "text-muted hover:text-foreground"}`}
+                      >
+                        {link.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    const Hero = forwardRef((props, ref) => {
+      return (
+        <section ref={ref} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+          <div className="hero-gradient-layer is-animated" />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
+          
+          <div className="relative z-10 text-center max-w-3xl px-4">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-foreground">
+              PERFORMANCE & <span className="text-primary">PRECISION</span>
+            </h1>
+            <p className="mt-4 text-lg text-muted">
+              Premium Auto Repair & Computer Diagnostics in Oran, Algeria.
+            </p>
+          </div>
+
+          <a
+            href={ORAN_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-8 left-6 sm:left-10 z-20 flex items-center justify-center w-14 h-14 rounded-full border border-border bg-surface/60 backdrop-blur-md hover:bg-surface/90 hover:border-primary/60 transition-all"
+            title="Oran, Algeria"
+          >
+            <Icon name="map-pin" className="w-6 h-6 text-foreground" />
+          </a>
+
+          <a
+            href={PHONE_TEL}
+            className="absolute bottom-8 right-6 sm:right-10 z-20 flex items-center justify-center w-16 h-16 rounded-full bg-primary text-on-primary shadow-glow hover:bg-red-700 transition-all"
+            title="Call Us"
+          >
+            <Icon name="phone" className="w-7 h-7 text-white" />
+          </a>
+        </section>
+      );
+    });
+
+    const Services = forwardRef((props, ref) => {
+      const SERVICES = [
+        { id: 1, icon: "wrench", title: "Engine Diagnostics", description: "Complete computer diagnostics to identify and resolve engine issues fast." },
+        { id: 2, icon: "circle-dot", title: "Brake Service", description: "Pads, rotors, and fluid - reliable stopping power you can trust." },
+        { id: 3, icon: "droplets", title: "Oil Changes", description: "Quick, quality oil and filter changes to keep your engine running smooth." },
+        { id: 4, icon: "settings-2", title: "Transmission", description: "Automatic and manual transmission repair, service, and replacement." },
+        { id: 5, icon: "thermometer", title: "AC & Heating", description: "Keep your cabin comfortable with expert climate system service." },
+        { id: 6, icon: "refresh-cw", title: "Tire Rotation", description: "Even out tire wear and extend the life of your set." },
+        { id: 7, icon: "arrow-up-down", title: "Suspension", description: "Shocks, struts, and alignment for a smooth, controlled ride." },
+        { id: 8, icon: "zap", title: "Electrical", description: "Batteries, starters, alternators, and wiring diagnostics." },
+      ];
+
+      return (
+        <section ref={ref} id="services" className="relative py-24 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+ 
